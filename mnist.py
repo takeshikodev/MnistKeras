@@ -3,50 +3,50 @@ from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
-print("Загрузка данных MNIST...")
+print("Data loading MNIST...")
 (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
-print("Данные загружены.")
+print("Data loaded.")
 
-print("Предобработка данных...")
+print("Data preprocessing...")
 x_train = x_train / 255.0
 x_test = x_test / 255.0
 
 y_train_one_hot = keras.utils.to_categorical(y_train, num_classes=10)
 y_test_one_hot = keras.utils.to_categorical(y_test, num_classes=10)
-print("Предобработка завершена.")
+print("Data preprocessing completed.")
 
-print("Построение модели...")
+print("Model building...")
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(28, 28)),
     keras.layers.Dense(128, activation='relu'),
     keras.layers.Dense(10, activation='softmax')
 ])
-print("Модель построена.")
+print("Model built.")
 model.summary()
 
-print("Компиляция модели...")
+print("Model compilation...")
 model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
-print("Модель скомпилирована.")
+print("Model compiled.")
 
-print("Обучение модели...")
+print("Model training...")
 history = model.fit(x_train, y_train_one_hot, epochs=5, batch_size=32, validation_data=(x_test, y_test_one_hot))
-print("Обучение завершено.")
+print("Model training completed.")
 
-print("Оценка модели на тестовых данных...")
+print("Model evaluation on test data...")
 loss, accuracy = model.evaluate(x_test, y_test_one_hot, verbose=0)
-print(f"Потери на тестовых данных: {loss:.4f}")
-print(f"Точность на тестовых данных: {accuracy:.4f}")
+print(f"Loss on test data: {loss:.4f}")
+print(f"Accuracy on test data: {accuracy:.4f}")
 
-print("Предсказания для первых 5 тестовых изображений...")
+print("Predictions for first 5 test images...")
 predictions = model.predict(x_test[:5])
 
-print("Предсказания:")
+print("Predictions:")
 for i in range(5):
     predicted_class = np.argmax(predictions[i])
     true_class = y_test[i]
-    print(f"Изображение {i}: Предсказано {predicted_class}, Настоящая {true_class}")
+    print(f"Image {i}: Predicted {predicted_class}, True {true_class}")
 
 fig, axes = plt.subplots(1, 5, figsize=(10, 3))
 for i in range(5):
